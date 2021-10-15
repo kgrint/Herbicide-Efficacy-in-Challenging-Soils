@@ -59,11 +59,23 @@ AMATU_EFF_means= emmeans(AMATU_EFF, ~ Herb, contr="pairwise", type= "response", 
 AMATU_EFF_cld <- cld(AMATU_EFF_means$emmean, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=TRUE)
 ```
 
-```{r}
+```{r, fig.height= 8, fig.width= 12}
 AMATU_EFF_Fig= ggplot(AMATU_EFF_cld, aes(x= Herb, y= response*100, color= Herb))+
-  geom_point()
+  geom_point() +
+  geom_text(aes(label= .group), nudge_y = 25, size =7) +
+  geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4))+
+  geom_jitter(data= data1, mapping= aes(y=AMATU_EFF*100), alpha=0.2)+
+  labs(title = "Waterhemp Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control") +
+  theme(legend.position = "none",
+        plot.title = element_text(size= 25),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25)) +
+  coord_flip()
 
 AMATU_EFF_Fig 
+
 ```
 
 # Lambsquarters Efficacy
@@ -99,6 +111,17 @@ plot(AMATU_Count1)
 anova(AMATU_Count1)
 ```
 
+```{r}
+AMATU_Count_means= lsmeans(AMATU_Count1, ~ Herb, contr="pairwise", type= "response", adjust="none", alpha= 0.05)
+
+AMATU_Count_cld <- cld(AMATU_Count_means$response, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=TRUE)
+```
+
+
+### Poisson Distribution
+```{r}
+
+```
 
 # Waterhemp Biomass
 ```{r}
