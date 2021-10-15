@@ -1,0 +1,65 @@
+---
+title: "Untitled"
+output: pdf_document
+---
+
+### Loading Packages
+```{r}
+library(car)
+library(ggplot2)
+library(emmeans)
+library(lme4)
+library(lmerTest)
+library(tidyverse)
+library(glmmTMB)
+```
+
+### Accessing Data
+```{r}
+getwd()
+data1= read.csv(file="ShawnoHerb.csv")
+```
+
+### Data Wrangling
+```{r}
+data1= data1 %>%
+  mutate(AMATU_Count= (AMATU_1 + AMATU_2)*2) #converted to 1m^2
+```
+
+# Waterhemp Efficacy 
+```{r}
+AMATU_EFF= glmmTMB(AMATU_EFF ~ Herb + (1|Rep), data= data1)
+
+Anova.glmmTMB(AMATU_EFF)
+
+Anova(AMATU_EFF)
+```
+```{r}
+
+```
+
+```{r}
+
+```
+
+# Lambsquarters Efficacy
+```{r}
+
+
+```
+
+
+# Waterhemp Counts
+```{r}
+AMATU_Count= lmer(AMATU_Count ~ Herb + (1|Rep), data= data1)
+
+qqnorm(resid(AMATU_Count))
+plot(AMATU_Count)
+```
+
+
+# Waterhemp Biomass
+```{r}
+
+```
+
