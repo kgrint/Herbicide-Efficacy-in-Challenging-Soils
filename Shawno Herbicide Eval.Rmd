@@ -12,49 +12,91 @@ library(lme4)
 library(lmerTest)
 library(tidyverse)
 library(glmmTMB)
+library(multcomp)
+library(multcompView)
 ```
 
 ### Accessing Data
 ```{r}
 getwd()
 data1= read.csv(file="ShawnoHerb.csv")
+str(data1)
 ```
 
 ### Data Wrangling
 ```{r}
 data1= data1 %>%
-  mutate(AMATU_Count= (AMATU_1 + AMATU_2)*2) #converted to 1m^2
+  mutate(Rep = as.factor(Rep),
+         Treatment = as.factor(Treatment),
+         AMATU_Count= (AMATU_1 + AMATU_2)*2,#converted to 1m^2
+         AMATU_EFF= round(AMATU_EFF/100,2),
+         AMATU_EFF= case_when(
+           AMATU_EFF == 1.00 ~ 0.99,
+           AMATU_EFF == 0.00 ~ 0.01,
+           TRUE ~ AMATU_EFF),
+         CHEAL_EFF= round(CHEAL_EFF/100,2),
+         CHEAL_EFF= case_when(
+           CHEAL_EFF == 1.00 ~ 0.99,
+           CHEAL_EFF == 0.00 ~ 0.01,
+           TRUE ~ CHEAL_EFF))
+
+
 ```
 
 # Waterhemp Efficacy 
 ```{r}
-AMATU_EFF= glmmTMB(AMATU_EFF ~ Herb + (1|Rep), data= data1)
+AMATU_EFF= glmmTMB(AMATU_EFF ~ Herb + (1|Rep), beta_family(link = "logit"), data= data1)
 
-Anova.glmmTMB(AMATU_EFF)
 
-Anova(AMATU_EFF)
-```
-```{r}
-
+glmmTMB:::Anova.glmmTMB(AMATU_EFF)
+#Herbicide significant
 ```
 
-```{r}
 
+```{r}
+AMATU_EFF_means= emmeans(AMATU_EFF, ~ Herb, contr="pairwise", type= "response", adjust="none", alpha= 0.05)
+
+AMATU_EFF_cld <- cld(AMATU_EFF_means$emmean, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=TRUE)
+```
+
+```{r}
+AMATU_EFF_Fig= ggplot(AMATU_EFF_cld, aes(x= Herb, y= response*100, color= Herb))+
+  geom_point()
+
+AMATU_EFF_Fig 
 ```
 
 # Lambsquarters Efficacy
 ```{r}
+CHEAL_EFF= glmmTMB(CHEAL_EFF ~ Herb + (1|Rep), beta_family(link = "logit") ,data= data1)
+
+glmmTMB:::Anova.glmmTMB(CHEAL_EFF)
+
+```
 
 
+```{r}
+CHEAL_EFF_means= emmeans(CHEAL_EFF, ~ Herb, contr="pairwise", type= "response", adjust="none", alpha= 0.05)
+
+CHEAL_EFF_cld <- cld(CHEAL_EFF_means$emmean, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=TRUE)
 ```
 
 
 # Waterhemp Counts
 ```{r}
-AMATU_Count= lmer(AMATU_Count ~ Herb + (1|Rep), data= data1)
+AMATU_Count= lmer(AMATU_Count ~ Herb + (1|Rep), data = data1)
 
 qqnorm(resid(AMATU_Count))
 plot(AMATU_Count)
+
+#Sqrt transformation
+AMATU_Count1= lmer(sqrt(AMATU_Count) ~ Herb + (1|Rep), data= data1)
+
+qqnorm(resid(AMATU_Count1))
+plot(AMATU_Count1)
+#assumptions for normality and homogenous variance of residuals better met
+
+anova(AMATU_Count1)
 ```
 
 
