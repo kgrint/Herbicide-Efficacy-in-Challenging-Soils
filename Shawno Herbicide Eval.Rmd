@@ -50,6 +50,8 @@ AMATU_EFF= glmmTMB(AMATU_EFF ~ Herb + (1|Rep), beta_family(link = "logit"), data
 
 glmmTMB:::Anova.glmmTMB(AMATU_EFF)
 #Herbicide significant
+
+summary(AMATU_EFF)
 ```
 
 
@@ -61,18 +63,20 @@ AMATU_EFF_cld <- cld(AMATU_EFF_means$emmean, alpha=0.05, Letters=letters, adjust
 
 ```{r, fig.height= 8, fig.width= 12}
 AMATU_EFF_Fig= ggplot(AMATU_EFF_cld, aes(x= Herb, y= response*100, color= Herb))+
-  geom_point() +
-  geom_text(aes(label= .group), nudge_y = 25, size =7) +
+  geom_point(size= 4) +
+  geom_text(aes(label= .group), nudge_y = 20, size =7) +
   geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4))+
-  geom_jitter(data= data1, mapping= aes(y=AMATU_EFF*100), alpha=0.2)+
-  labs(title = "Waterhemp Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control") +
+  geom_jitter(data= data1, mapping= aes(y=AMATU_EFF*100), alpha=0.2) +
   theme(legend.position = "none",
         plot.title = element_text(size= 25),
         axis.text.x = element_text(size = 20),
         axis.text.y = element_text(size = 20),
         axis.title.x = element_text(size = 25),
         axis.title.y = element_text(size = 25)) +
-  coord_flip()
+  coord_flip() +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,110)) + 
+  scale_x_discrete(limits= c("Zidua","Warrant","Valor SX","Tricor DF","Spartan","Pursuit","Outlook","Fierce","Dual II Magnum","Broadaxe XC","Authority Assist", "Nontreated")) +
+  labs(title = "Waterhemp Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control")
 
 AMATU_EFF_Fig 
 
@@ -83,7 +87,9 @@ AMATU_EFF_Fig
 CHEAL_EFF= glmmTMB(CHEAL_EFF ~ Herb + (1|Rep), beta_family(link = "logit") ,data= data1)
 
 glmmTMB:::Anova.glmmTMB(CHEAL_EFF)
+#Herbicide significant
 
+summary(CHEAL_EFF)
 ```
 
 
@@ -93,8 +99,35 @@ CHEAL_EFF_means= emmeans(CHEAL_EFF, ~ Herb, contr="pairwise", type= "response", 
 CHEAL_EFF_cld <- cld(CHEAL_EFF_means$emmean, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=TRUE)
 ```
 
+```{r, fig.height= 8, fig.width= 12}
+CHEAL_EFF_Fig= ggplot(CHEAL_EFF_cld, aes(x= Herb, y= response*100, color= Herb))+
+  geom_point(size= 4) +
+  geom_text(aes(label= .group), nudge_y = 25, size =7) +
+  geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4))+
+  geom_jitter(data= data1, mapping= aes(y=CHEAL_EFF*100), alpha=0.2) +
+  theme(legend.position = "none",
+        plot.title = element_text(size= 25),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25)) +
+  coord_flip() +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,120)) + 
+  scale_x_discrete(limits= c("Zidua","Warrant","Valor SX","Tricor DF","Spartan","Pursuit","Outlook","Fierce","Dual II Magnum","Broadaxe XC","Authority Assist", "Nontreated")) +
+  labs(title = "Lambsquarters Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control")
+
+CHEAL_EFF_Fig 
+```
+
 
 # Waterhemp Counts
+
+```{r}
+ggplot(data1, aes(x= AMATU_Count))+
+  geom_density()
+```
+The data is right skewed so I think the best analysis to proceed with would be the Poisson distribution. Other models were included as well.
+
 ```{r}
 AMATU_Count= lmer(AMATU_Count ~ Herb + (1|Rep), data = data1)
 
@@ -109,12 +142,18 @@ plot(AMATU_Count1)
 #assumptions for normality and homogenous variance of residuals better met
 
 anova(AMATU_Count1)
+
+#Poisson distribution
+AMATU_Count2= glmmTMB(AMATU_Count~ Herb + (1|Rep), data = data1, family = poisson(link="log"))
+
+glmmTMB:::Anova.glmmTMB(AMATU_Count2)
+
 ```
 
 ```{r}
-AMATU_Count_means= lsmeans(AMATU_Count1, ~ Herb, contr="pairwise", type= "response", adjust="none", alpha= 0.05)
+AMATU_Count_means= emmeans(AMATU_Count1, ~ Herb, contr="pairwise", type= "response", adjust="none", alpha= 0.05)
 
-AMATU_Count_cld <- cld(AMATU_Count_means$response, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=TRUE)
+AMATU_Count_cld <- cld(AMATU_Count_means$emmean, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=TRUE)
 ```
 
 
