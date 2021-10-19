@@ -40,10 +40,31 @@ data1= data1 %>%
            CHEAL_EFF == 0.00 ~ 0.01,
            TRUE ~ CHEAL_EFF))
 
-
+data2= data1 %>%
+  filter(!Herb == "Nontreated")
 ```
 
 # Waterhemp Efficacy 
+
+```{r}
+ggplot(data2, aes(x= AMATU_EFF))+
+  geom_density()
+
+ggplot(data2, aes(x= sqrt(AMATU_EFF)))+
+  geom_density()
+
+AMATU_EFF.1= lmer(AMATU_EFF ~ Herb + (1|Rep), data= data2)
+AMATU_EFF.2= lmer(sqrt(AMATU_EFF) ~ Herb + (1|Rep), data= data2)
+AMATU_EFF.3= lmer(sqrt(AMATU_EFF) ~ Herb + (1|Rep), data= data2)
+
+qqnorm(resid(AMATU_EFF.1))
+qqnorm(resid(AMATU_EFF.2))
+
+plot(AMATU_EFF.1)
+plot(AMATU_EFF.2)
+```
+
+
 ```{r}
 AMATU_EFF= glmmTMB(AMATU_EFF ~ Herb + (1|Rep), beta_family(link = "logit"), data= data1)
 
