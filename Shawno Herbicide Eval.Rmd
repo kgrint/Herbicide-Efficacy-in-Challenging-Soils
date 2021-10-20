@@ -47,6 +47,7 @@ data2= data1 %>%
 # Waterhemp Efficacy 
 
 ```{r}
+# trying to figure out if I need to change analysis for the distribution
 ggplot(data2, aes(x= AMATU_EFF))+
   geom_density()
 
@@ -62,12 +63,16 @@ qqnorm(resid(AMATU_EFF.2))
 
 plot(AMATU_EFF.1)
 plot(AMATU_EFF.2)
+
+
+
+
 ```
 
 
 ```{r}
-AMATU_EFF= glmmTMB(AMATU_EFF ~ Herb + (1|Rep), beta_family(link = "logit"), data= data1)
-
+#AMATU_EFF= glmmTMB(AMATU_EFF ~ Herb + (1|Rep), beta_family(link = "logit"), data= data1)
+AMATU_EFF= glmmTMB(logit(AMATU_EFF) ~ Herb + (1|Rep), family = "gaussian", data= data2)
 
 glmmTMB:::Anova.glmmTMB(AMATU_EFF)
 #Herbicide significant
@@ -85,9 +90,9 @@ AMATU_EFF_cld <- cld(AMATU_EFF_means$emmean, alpha=0.05, Letters=letters, adjust
 ```{r, fig.height= 8, fig.width= 12}
 AMATU_EFF_Fig= ggplot(AMATU_EFF_cld, aes(x= Herb, y= response*100, color= Herb))+
   geom_point(size= 4) +
-  geom_text(aes(label= .group), nudge_y = 20, size =7) +
+  geom_text(aes(label= .group), nudge_y = c(5,5,7,8,10,10,10,10,12,20,17), size =7) +
   geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4))+
-  geom_jitter(data= data1, mapping= aes(y=AMATU_EFF*100), alpha=0.2) +
+  geom_jitter(data= data2, mapping= aes(y=AMATU_EFF*100), alpha=0.2) +
   theme(legend.position = "none",
         plot.title = element_text(size= 25),
         axis.text.x = element_text(size = 20),
@@ -95,8 +100,8 @@ AMATU_EFF_Fig= ggplot(AMATU_EFF_cld, aes(x= Herb, y= response*100, color= Herb))
         axis.title.x = element_text(size = 25),
         axis.title.y = element_text(size = 25)) +
   coord_flip() +
-  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,110)) + 
-  scale_x_discrete(limits= c("Zidua","Warrant","Valor SX","Tricor DF","Spartan","Pursuit","Outlook","Fierce","Dual II Magnum","Broadaxe XC","Authority Assist", "Nontreated")) +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,120)) + 
+  scale_x_discrete(limits= c("Zidua","Warrant","Valor SX","Tricor DF","Spartan","Pursuit","Outlook","Fierce","Dual II Magnum","Broadaxe XC","Authority Assist")) +
   labs(title = "Waterhemp Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control")
 
 AMATU_EFF_Fig 
@@ -105,7 +110,7 @@ AMATU_EFF_Fig
 
 # Lambsquarters Efficacy
 ```{r}
-CHEAL_EFF= glmmTMB(CHEAL_EFF ~ Herb + (1|Rep), beta_family(link = "logit") ,data= data1)
+CHEAL_EFF= glmmTMB(logit(CHEAL_EFF) ~ Herb + (1|Rep), family= "gaussian" ,data= data2)
 
 glmmTMB:::Anova.glmmTMB(CHEAL_EFF)
 #Herbicide significant
@@ -123,9 +128,9 @@ CHEAL_EFF_cld <- cld(CHEAL_EFF_means$emmean, alpha=0.05, Letters=letters, adjust
 ```{r, fig.height= 8, fig.width= 12}
 CHEAL_EFF_Fig= ggplot(CHEAL_EFF_cld, aes(x= Herb, y= response*100, color= Herb))+
   geom_point(size= 4) +
-  geom_text(aes(label= .group), nudge_y = 25, size =7) +
+  geom_text(aes(label= .group), nudge_y = c(5,5,5,5,5,5,5,13,35,31,20), size =7) +
   geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4))+
-  geom_jitter(data= data1, mapping= aes(y=CHEAL_EFF*100), alpha=0.2) +
+  geom_jitter(data= data2, mapping= aes(y=CHEAL_EFF*100), alpha=0.2) +
   theme(legend.position = "none",
         plot.title = element_text(size= 25),
         axis.text.x = element_text(size = 20),
@@ -133,8 +138,8 @@ CHEAL_EFF_Fig= ggplot(CHEAL_EFF_cld, aes(x= Herb, y= response*100, color= Herb))
         axis.title.x = element_text(size = 25),
         axis.title.y = element_text(size = 25)) +
   coord_flip() +
-  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,120)) + 
-  scale_x_discrete(limits= c("Zidua","Warrant","Valor SX","Tricor DF","Spartan","Pursuit","Outlook","Fierce","Dual II Magnum","Broadaxe XC","Authority Assist", "Nontreated")) +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,110)) + 
+  scale_x_discrete(limits= c("Zidua","Warrant","Valor SX","Tricor DF","Spartan","Pursuit","Outlook","Fierce","Dual II Magnum","Broadaxe XC","Authority Assist")) +
   labs(title = "Lambsquarters Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control")
 
 CHEAL_EFF_Fig 
@@ -172,9 +177,9 @@ glmmTMB:::Anova.glmmTMB(AMATU_Count2)
 ```
 
 ```{r}
-AMATU_Count_means= emmeans(AMATU_Count1, ~ Herb, contr="pairwise", type= "response", adjust="none", alpha= 0.05)
+AMATU_Count_means= emmeans(AMATU_Count2, ~ Herb, contr="pairwise", type= "response", adjust="none", alpha= 0.05)
 
-AMATU_Count_cld <- cld(AMATU_Count_means$emmean, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=TRUE)
+AMATU_Count_cld <- cld(AMATU_Count_means$emmean, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=FALSE)
 ```
 
 
@@ -182,6 +187,32 @@ AMATU_Count_cld <- cld(AMATU_Count_means$emmean, alpha=0.05, Letters=letters, ad
 ```{r}
 
 ```
+
+```{r, fig.height= 8, fig.width= 12}
+
+label.text = bquote('Waterhemp Density'~(Plants~m^-2))
+
+AMATU_Count_Fig= ggplot(AMATU_Count_cld, aes(x= Herb, y= rate, color= Herb))+
+  geom_point(size= 4) +
+  geom_text(aes(label= .group), nudge_y = c(10,10,10,10,10,10,10,10,10,10,17,17), size = 7) +
+  geom_errorbar(aes(ymin= lower.CL, ymax= upper.CL, width= 0.4))+
+  geom_jitter(data= data1, mapping= aes(y=AMATU_Count), alpha=0.2) +
+  theme(legend.position = "none",
+        plot.title = element_text(size= 25),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25)) +
+  coord_flip() +
+  scale_y_continuous(label.text, breaks= c(0,20,40,60,80,100), limits= c(-1,120)) + 
+  scale_x_discrete(limits= c("Zidua","Warrant","Valor SX","Tricor DF","Spartan","Pursuit","Outlook","Fierce","Dual II Magnum","Broadaxe XC","Authority Assist", "Nontreated")) +
+  labs(title = "Waterhemp Density - 50 DAT", x = "PRE Herbicide")
+
+
+
+AMATU_Count_Fig
+```
+
 
 # Waterhemp Biomass
 ```{r}

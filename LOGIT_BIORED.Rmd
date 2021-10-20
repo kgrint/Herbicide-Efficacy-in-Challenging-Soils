@@ -1,0 +1,116 @@
+---
+title: "LOGIT BIORED - WATERHEMP"
+author: "Felipe A. Faleco"
+date: "01/26/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(car)
+library(emmeans)
+library(multcompView)
+library(glmmTMB)
+library(ggpubr)
+
+```
+
+
+# DATA
+
+```{r}
+
+waterhemp <- read.csv("All POST_Reduction.csv")
+
+str(waterhemp)
+
+waterhemp$run <- as.factor(waterhemp$run)
+
+waterhemp$pop <- as.factor(waterhemp$pop)
+
+waterhemp$Herbicide <- as.factor(waterhemp$Herbicide)
+
+waterhemp$Dose <- as.factor(waterhemp$Dose)
+
+waterhemp$rep <- as.factor(waterhemp$rep)
+
+str(waterhemp)
+
+```
+
+
+# MODEL
+
+```{r}
+
+model <- glmmTMB(logit(bio_red) ~ Herbicide * Dose + (1|run) + (1|pop), data = waterhemp, family = "gaussian")
+
+
+```
+
+
+# SUMMARY
+
+```{r, echo=TRUE}
+
+summary(model)
+
+```
+
+
+# ANOVA
+
+```{r, echo=TRUE}
+
+glmmTMB:::Anova.glmmTMB(model)
+
+```
+
+
+# EMM & CLD
+
+```{r, echo=TRUE}
+
+emm_herb_dose <- emmeans(model, ~ Herbicide|Dose, adjust = "tukey", type = "response", contr = "pairwise")
+
+emm_herb_dose
+
+CLD_emm_herb_dose <- if(requireNamespace("multcomp")) {
+    multcomp::cld(emm_herb_dose$emmeans, alpha = 0.05, Letters=letters, adjust="tukey", reversed = TRUE)}
+
+CLD_emm_herb_dose
+
+```
+
+
+# PLOT
+
+```{r, echo=TRUE}
+
+
+plot(emm_herb_dose, adjust = "tukey", comparisons = F, alpha = 0.05) + 
+  geom_point(size = 2) +
+  geom_text(aes(label = c("b", "b", "b", "a", "a", "c", "d", "a",
+                          "a", "a", "a", "a", "a", "b", "c", "a")),
+            vjust = -0.8, size = 4) +
+  scale_x_continuous(breaks = c(0, 0.25, 0.50, 0.75, 1), limits = c(0, 1),
+    labels = scales::percent_format(scale = 100, suffix = "")) +
+  labs(title = "Waterhemp Biomass Reduction - POST", 
+       x = "Biomass Reduction (%)", 
+       y = "Herbicide") +
+  facet_grid(~ Dose, labeller = label_both) +
+  theme_bw() + 
+  theme (plot.title = element_text(face = "bold", hjust = 0.5, size = 18, colour = "darkgreen"), 
+         axis.title = element_text(face = "bold", size = 18, colour = "darkgreen"), 
+         axis.text= element_text(face = "bold", size = 14, colour = "black"),
+         strip.text = element_text(face = "bold", size = 14, colour = "black"),
+         panel.spacing = unit(1.0, "lines")) +
+  ggsave("LOGIT Tukey HSD_HERBxRATE.jpeg", units="in", width = 10, height = 4, dpi = 600)
+
+
+```
+
+
