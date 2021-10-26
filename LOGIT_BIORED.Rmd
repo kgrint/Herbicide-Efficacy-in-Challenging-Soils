@@ -44,6 +44,13 @@ str(waterhemp)
 
 # MODEL
 
+
+
+```{r}
+ggplot(waterhemp, aes(x= bio_red))+
+  geom_density()
+```
+
 ```{r}
 
 model <- glmmTMB(logit(bio_red) ~ Herbicide * Dose + (1|run) + (1|pop), data = waterhemp, family = "gaussian")
@@ -107,8 +114,8 @@ plot(emm_herb_dose, adjust = "tukey", comparisons = F, alpha = 0.05) +
          axis.title = element_text(face = "bold", size = 18, colour = "darkgreen"), 
          axis.text= element_text(face = "bold", size = 14, colour = "black"),
          strip.text = element_text(face = "bold", size = 14, colour = "black"),
-         panel.spacing = unit(1.0, "lines")) +
-  ggsave("LOGIT Tukey HSD_HERBxRATE.jpeg", units="in", width = 10, height = 4, dpi = 600)
+         panel.spacing = unit(1.0, "lines")) #+
+  #ggsave("LOGIT Tukey HSD_HERBxRATE.jpeg", units="in", width = 10, height = 4, dpi = 600)
 
 
 ```
