@@ -14,6 +14,7 @@ library(tidyverse)
 library(glmmTMB)
 library(multcomp)
 library(multcompView)
+library(writexl)
 ```
 
 ### Accessing Data
@@ -367,5 +368,12 @@ AMATU_Bio_Fig= ggplot(AMATU_Bio_cld, aes(x= Herb, y= response, color= SOA))+
 AMATU_Bio_Fig
 
 ggsave("Waterhemp_Biomass.jpeg", plot= AMATU_Bio_Fig, height= 8, width= 12, dpi = 300)
+```
+
+```{r}
+write.csv(AMATU_EFF_cld,"C:/Users/Kolby Grint/OneDrive/Data and Figures/NPM-Herbicide-Efficacy\\Waterhemp Efficacy.csv")
+write.csv(CHEAL_EFF_cld,"C:/Users/Kolby Grint/OneDrive/Data and Figures/NPM-Herbicide-Efficacy\\Lambsquarters Efficacy.csv")
+write.csv(AMATU_Count_cld,"C:/Users/Kolby Grint/OneDrive/Data and Figures/NPM-Herbicide-Efficacy\\Waterhemp Density.csv")
+write.csv(AMATU_Bio_cld,"C:/Users/Kolby Grint/OneDrive/Data and Figures/NPM-Herbicide-Efficacy\\Waterhemp Biomass.csv")
 ```
 
