@@ -340,7 +340,7 @@ anova(bio.mod1)
 ```{r}
 AMATU_Bio_means= lsmeans(bio.mod1, ~ Herb, contr="pairwise", type= "response", adjust="none", alpha= 0.05)
 
-AMATU_Bio_cld <- cld(AMATU_Bio_means$lsmeans, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=FALSE)
+AMATU_Bio_cld <- cld(AMATU_Bio_means$lsmeans, alpha=0.05, Letters=letters, adjust="tukey", sort=TRUE, reverse=FALSE)
 ```
 
 ```{r}
