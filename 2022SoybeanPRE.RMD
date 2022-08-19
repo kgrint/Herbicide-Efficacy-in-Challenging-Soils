@@ -30,7 +30,6 @@ str(data1)
 #in the future, percentage data needs to be in decimal format
 ```
 
-
 ```{r}
 Chippewa28 = data1 %>%
   filter(Location == "Chippewa") %>%
@@ -107,7 +106,6 @@ Chippewa50 = data2 %>%
 Waupaca50 = data2 %>%
   filter(Location == "Waupaca") %>%
   filter(!Trt == "Check")
-
 ```
 
 ## Chippewa Waterhemp 50 DAT

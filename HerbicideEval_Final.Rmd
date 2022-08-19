@@ -1,0 +1,174 @@
+---
+title: "Herbicide Evaluation_Final"
+author: "Kolby Grint"
+date: "2022-08-19"
+output: pdf_document
+---
+
+```{r, echo = FALSE}
+#Loading Packages
+library(car)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(emmeans)
+library(glmmTMB)
+library(multcomp)
+library(multcompView)
+```
+
+```{r}
+getwd()
+data1 = read.csv(file = "50DAT_ratings.csv")
+
+str(data1)
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+```{r}
+getwd()
+data1= read.csv(file="ShawnoHerb.csv")
+str(data1)
+
+```
+
+# Waterhemp Efficacy
+### 2021 Analysis
+```{r}
+data1= data1 %>%
+  mutate(Rep = as.factor(Rep),
+         Treatment = as.factor(Treatment),
+         AMATU_Count= (AMATU_1 + AMATU_2)*2,#converted to 1m^2
+         AMATU_EFF= round(AMATU_EFF/100,2),
+         AMATU_EFF= case_when(
+           AMATU_EFF == 1.00 ~ 0.99,
+           AMATU_EFF == 0.00 ~ 0.01,
+           TRUE ~ AMATU_EFF),
+         CHEAL_EFF= round(CHEAL_EFF/100,2),
+         CHEAL_EFF= case_when(
+           CHEAL_EFF == 1.00 ~ 0.99,
+           CHEAL_EFF == 0.00 ~ 0.01,
+           TRUE ~ CHEAL_EFF),
+         SOA = fct_recode(Herb,
+                                 "2 + 14" = "Authority Assist",
+                                 "14 + 15" = "Broadaxe XC",
+                                 "14 + 15" = "Fierce",
+                                 "15" = "Zidua",
+                                 "15" = "Warrant",
+                                 "14" = "Valor SX",
+                                 "5" = "Tricor DF",
+                                 "14" = "Spartan",
+                                 "2" = "Pursuit",
+                                 "15" = "Outlook",
+                                 "15" = "Dual II Magnum",
+                                 "none" = "Nontreated"),
+         Herb= fct_recode(Herb,
+                          "sulfentrazone + imazethapyr" = "Authority Assist",
+                          "sulfentrazone + S-metolachlor" = "Broadaxe XC",
+                                 "flumioxazin + pyroxasulfone" = "Fierce",
+                                 "pyroxasulfone" = "Zidua",
+                                 "acetochlor" = "Warrant",
+                                 "flumioxazin" = "Valor SX",
+                                 "metribuzin" = "Tricor DF",
+                                 "sulfentrazone" = "Spartan",
+                                 "imazethapyr" = "Pursuit",
+                                 "dimethenamid-P" = "Outlook",
+                                 "S-metolachlor" = "Dual II Magnum",
+                                 "Nontreated" = "Nontreated"))%>%
+  filter(!is.na(AMATU_Count))
+
+data2= data1 %>%
+  filter(!Herb == "Nontreated") %>%
+  filter(!is.na(AMATU_EFF))%>%
+  filter(!is.na(CHEAL_EFF))%>%
+  filter(!is.na(AMATU_Bio)) %>%
+  mutate()
+
+```
+
+```{r}
+AMATU_EFF= glmmTMB(logit(AMATU_EFF) ~ Herb + (1|Rep), family = "gaussian", data= data2)
+
+glmmTMB:::Anova.glmmTMB(AMATU_EFF)
+#Herbicide significant
+```
+
+```{r}
+AMATU_EFF_means= emmeans(AMATU_EFF, ~ Herb, contr="pairwise", type= "response", adjust="none", alpha= 0.05)
+
+AMATU_EFF_cld <- cld(AMATU_EFF_means$emmean, alpha=0.05, Letters=letters, adjust="none", sort=TRUE, reverse=TRUE)
+```
+
+```{r}
+Shaw_cld = as_tibble(AMATU_EFF_cld) %>%
+  mutate(Herb= factor(Herb, levels= order),
+         SOA = fct_recode(Herb,
+                                 "2 + 14" = "sulfentrazone + imazethapyr",
+                                 "14 + 15" = "sulfentrazone + S-metolachlor",
+                                 "14 + 15" = "flumioxazin + pyroxasulfone",
+                                 "15" = "pyroxasulfone",
+                                 "15" = "acetochlor",
+                                 "14" = "flumioxazin",
+                                 "5" = "metribuzin",
+                                 "14" = "sulfentrazone",
+                                 "2" = "imazethapyr",
+                                 "15" = "dimethenamid-P",
+                                 "15" = "S-metolachlor"),
+         Location = "Shawano")
+
+```
+
+### 2022 Analysis
+```{r}
+data3 = read.csv(file="50DAT_ratings.csv")
+
+Chippewa50 = data3 %>%
+  filter(Location == "Chippewa") %>%
+  filter(!Trt == "Check")
+
+Waupaca50 = data3 %>%
+  filter(Location == "Waupaca") %>%
+  filter(!Trt == "Check")
+```
+
+```{r}
+Chip_AMATU50 = glmmTMB(logit(waterhemp) ~ Trt + (1|rep), family = "gaussian", data = Chippewa50)
+
+glmmTMB:::Anova.glmmTMB(Chip_AMATU50)
+```
+
+
+```{r}
+CHIP_AMATU50_means = emmeans(Chip_AMATU50, ~ Trt, contr = "pairwise", type = "response", adjust = "none", alpha = 0.05)
+
+CHIP_AMATU50_cld = cld(CHIP_AMATU50_means$emmean, alpha = 0.05, Letters = letters, adjust = "none", sort = TRUE, reverse = TRUE)
+```
+
+```{r}
+CHIP_AMATU50_cld = as_tibble(CHIP_AMATU50_cld) %>%
+  mutate(Trt = factor(Trt, levels= order),
+         SOA = fct_recode(Trt,
+                          "5" = "Tricor DF",
+                          "14" = "Valor SX",
+                         "2 + 14" = "Authority First",
+                          "14 + 15" = "Fierce",
+                          "14 + 15" = "Broadaxe XC",
+                          "2 + 14" = "Authority Assist",
+                          "14" = "Spartan",
+                          "15" = "Zidua",
+                          "15" = "Outlook",
+                          "15" = "Warrant",
+                          "15" = "Dual II Magnum",
+                          "2" = "Pursuit"),
+         Location = "Chippewa")
+```
