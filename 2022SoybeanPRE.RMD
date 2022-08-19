@@ -1,0 +1,486 @@
+---
+title: "2022 Soybean PRE Trials"
+output: html_document
+---
+
+```{r, echo = FALSE}
+#Loading Packages
+library(car)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(emmeans)
+library(glmmTMB)
+library(multcomp)
+library(multcompView)
+```
+
+
+```{r}
+#Accessing CSV Data
+getwd()
+data1= read.csv(file="28DAT_ratings.csv")
+
+#data1 = data1 %>%
+  #mutate(Overall = case_when(
+    #Overall == 100 ~ 99,
+    #TRUE ~ Overall))
+         
+str(data1)
+#in the future, percentage data needs to be in decimal format
+```
+
+
+```{r}
+Chippewa28 = data1 %>%
+  filter(Location == "Chippewa") %>%
+  filter(!Trt == "Check")
+
+Chip_AMATU28 = glmmTMB(logit(Waterhemp) ~ Trt + (1|rep), family = "gaussian", data = Chippewa28)
+#Herbicide treatment was significant
+```
+
+
+```{r}
+glmmTMB:::Anova.glmmTMB(Chip_AMATU28)
+```
+
+
+```{r}
+CHIP_AMATU28_means = emmeans(Chip_AMATU28, ~ Trt, contr = "pairwise", type = "response", adjust = "none", alpha = 0.05)
+
+CHIP_AMATU28_cld = cld(CHIP_AMATU28_means$emmean, alpha = 0.05, Letters = letters, adjust = "none", sort = TRUE, reverse = TRUE)
+```
+
+```{r}
+order = c("Authority Assist", "Authority First","Broadaxe XC","Fierce","Zidua","Warrant","Outlook","Dual II Magnum","Valor SX","Spartan","Tricor DF","Pursuit")
+
+CHIP_AMATU28_cld = as_tibble(CHIP_AMATU28_cld) %>%
+  mutate(Trt = factor(Trt, levels= order),
+         SOA = fct_recode(Trt,
+                          "5" = "Tricor DF",
+                          "14" = "Valor SX",
+                         "2 + 14" = "Authority First",
+                          "14 + 15" = "Fierce",
+                          "14 + 15" = "Broadaxe XC",
+                          "2 + 14" = "Authority Assist",
+                          "14" = "Spartan",
+                          "15" = "Zidua",
+                          "15" = "Outlook",
+                          "15" = "Warrant",
+                          "15" = "Dual II Magnum",
+                          "2" = "Pursuit"))
+```
+
+
+```{r, fig.height= 8, fig.width= 12}
+CHIP_AMATU28_cld %>%
+  ggplot(aes(Trt, response*100, colour = SOA)) +
+  geom_point(size = 6) +
+  geom_hline(yintercept = 90, color = "red", size = 1) +
+  geom_text(aes(label= .group), nudge_y = c(8,8,8,8,8,10,10,13,20,21,27,29), size = 7) + 
+  geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4), size= 1) +
+  geom_jitter(data= Chippewa28, mapping= aes(y=Waterhemp), alpha=0.2, size= 4) +
+  scale_color_brewer(palette= "Dark2") +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,110)) +
+  coord_flip() +
+  labs(title = "Chippewa Waterhemp Efficacy - 28 DAT", x = "PRE Herbicide", y =  "% Control") +
+theme(#legend.position = "none",
+        legend.text = element_text(size= 20),
+        legend.title = element_text(size= 25),
+        plot.title = element_text(size= 25),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25))
+  
+```
+
+
+```{r}
+data2 = read.csv(file="50DAT_ratings.csv")
+
+Chippewa50 = data2 %>%
+  filter(Location == "Chippewa") %>%
+  filter(!Trt == "Check")
+
+Waupaca50 = data2 %>%
+  filter(Location == "Waupaca") %>%
+  filter(!Trt == "Check")
+
+```
+
+## Chippewa Waterhemp 50 DAT
+```{r}
+Chip_AMATU50 = glmmTMB(logit(waterhemp) ~ Trt + (1|rep), family = "gaussian", data = Chippewa50)
+
+glmmTMB:::Anova.glmmTMB(Chip_AMATU50)
+```
+
+
+```{r}
+CHIP_AMATU50_means = emmeans(Chip_AMATU50, ~ Trt, contr = "pairwise", type = "response", adjust = "none", alpha = 0.05)
+
+CHIP_AMATU50_cld = cld(CHIP_AMATU50_means$emmean, alpha = 0.05, Letters = letters, adjust = "none", sort = TRUE, reverse = TRUE)
+```
+
+```{r}
+CHIP_AMATU50_cld = as_tibble(CHIP_AMATU50_cld) %>%
+  mutate(Trt = factor(Trt, levels= order),
+         SOA = fct_recode(Trt,
+                          "5" = "Tricor DF",
+                          "14" = "Valor SX",
+                         "2 + 14" = "Authority First",
+                          "14 + 15" = "Fierce",
+                          "14 + 15" = "Broadaxe XC",
+                          "2 + 14" = "Authority Assist",
+                          "14" = "Spartan",
+                          "15" = "Zidua",
+                          "15" = "Outlook",
+                          "15" = "Warrant",
+                          "15" = "Dual II Magnum",
+                          "2" = "Pursuit"))
+```
+
+```{r, fig.height= 8, fig.width= 12}
+CHIP_AMATU50_cld %>%
+  ggplot(aes(Trt, response*100, colour = SOA)) +
+  geom_point(size = 6) +
+  geom_hline(yintercept = 90, color = "red", size = 1) +
+  geom_text(aes(label= .group), nudge_y = c(5,5,5,5,5,6,7,15,24,31,30,27), size = 7) + 
+  geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4), size= 1) +
+  geom_jitter(data= Chippewa50, mapping= aes(y=waterhemp), alpha=0.2, size= 4) +
+  scale_color_brewer(palette= "Dark2") +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,110)) +
+  coord_flip() +
+  labs(title = "Chippewa Waterhemp Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control") +
+theme(#legend.position = "none",
+        legend.text = element_text(size= 20),
+        legend.title = element_text(size= 25),
+        plot.title = element_text(size= 25),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25))
+```
+
+
+## Chippewa Grass 50 DAT
+```{r}
+Chip_POA50 = glmmTMB(logit(grass) ~ Trt + (1|rep), family = "gaussian", data = Chippewa50)
+
+glmmTMB:::Anova.glmmTMB(Chip_POA50)
+```
+
+
+```{r}
+Chip_POA50_means = emmeans(Chip_POA50, ~ Trt, contr = "pairwise", type = "response", adjust = "none", alpha = 0.05)
+
+Chip_POA50_cld = cld(Chip_POA50_means$emmean, alpha = 0.05, Letters = letters, adjust = "none", sort = TRUE, reverse = TRUE)
+```
+
+```{r}
+Chip_POA50_cld = as_tibble(Chip_POA50_cld) %>%
+  mutate(Trt = factor(Trt, levels= order),
+         SOA = fct_recode(Trt,
+                          "5" = "Tricor DF",
+                          "14" = "Valor SX",
+                         "2 + 14" = "Authority First",
+                          "14 + 15" = "Fierce",
+                          "14 + 15" = "Broadaxe XC",
+                          "2 + 14" = "Authority Assist",
+                          "14" = "Spartan",
+                          "15" = "Zidua",
+                          "15" = "Outlook",
+                          "15" = "Warrant",
+                          "15" = "Dual II Magnum",
+                          "2" = "Pursuit"))
+```
+
+```{r, fig.height= 8, fig.width= 12}
+Chip_POA50_cld %>%
+  ggplot(aes(Trt, response*100, colour = SOA)) +
+  geom_point(size = 6) +
+  geom_hline(yintercept = 90, color = "red", size = 1) +
+  geom_text(aes(label= .group), nudge_y = c(7,8,8,8,12,13,13,15,21,21,26,26), size = 7) + 
+  geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4), size= 1) +
+  geom_jitter(data= Chippewa50, mapping= aes(y=grass), alpha=0.2, size= 4) +
+  scale_color_brewer(palette= "Dark2") +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,110)) +
+  coord_flip() +
+  labs(title = "Chippewa Grass Weed Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control") +
+theme(#legend.position = "none",
+        legend.text = element_text(size= 20),
+        legend.title = element_text(size= 25),
+        plot.title = element_text(size= 25),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25))
+```
+
+## Waupaca Waterhemp 50 DAT
+```{r}
+Waup_AMATU50 = glmmTMB(logit(waterhemp) ~ Trt + (1|rep), family = "gaussian", data = Waupaca50)
+
+glmmTMB:::Anova.glmmTMB(Waup_AMATU50)
+```
+
+```{r}
+Waup_AMATU50_means = emmeans(Waup_AMATU50, ~ Trt, contr = "pairwise", type = "response", adjust = "none", alpha = 0.05)
+
+Waup_AMATU50_cld = cld(Waup_AMATU50_means$emmean, alpha = 0.05, Letters = letters, adjust = "none", sort = TRUE, reverse = TRUE)
+```
+
+```{r}
+Waup_AMATU50_cld = as_tibble(Waup_AMATU50_cld) %>%
+  mutate(Trt = factor(Trt, levels= order),
+         SOA = fct_recode(Trt,
+                          "5" = "Tricor DF",
+                          "14" = "Valor SX",
+                         "2 + 14" = "Authority First",
+                          "14 + 15" = "Fierce",
+                          "14 + 15" = "Broadaxe XC",
+                          "2 + 14" = "Authority Assist",
+                          "14" = "Spartan",
+                          "15" = "Zidua",
+                          "15" = "Outlook",
+                          "15" = "Warrant",
+                          "15" = "Dual II Magnum",
+                          "2" = "Pursuit"))
+```
+
+```{r, fig.height= 8, fig.width= 12}
+Waup_AMATU50_cld %>%
+  ggplot(aes(Trt, response*100, colour = SOA)) +
+  geom_point(size = 6) +
+  geom_hline(yintercept = 90, color = "red", size = 1) +
+  geom_text(aes(label= .group), nudge_y = c(5,5,5,5,5,5,5,5,5,5,5,16), size = 7) + 
+  geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4), size= 1) +
+  geom_jitter(data= Waupaca50, mapping= aes(y=waterhemp), alpha=0.2, size= 4) +
+  scale_color_brewer(palette= "Dark2") +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,110)) +
+  coord_flip() +
+  labs(title = "Waupaca Waterhemp Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control") +
+theme(#legend.position = "none",
+        legend.text = element_text(size= 20),
+        legend.title = element_text(size= 25),
+        plot.title = element_text(size= 25),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25))
+```
+
+## Waupaca Marestail 50 DAT
+```{r}
+Waup_ERICA50 = glmmTMB(logit(marestail) ~ Trt + (1|rep), family = "gaussian", data = Waupaca50)
+
+glmmTMB:::Anova.glmmTMB(Waup_ERICA50)
+```
+
+```{r}
+Waup_ERICA50_means = emmeans(Waup_ERICA50, ~ Trt, contr = "pairwise", type = "response", adjust = "none", alpha = 0.05)
+
+Waup_ERICA50_cld = cld(Waup_ERICA50_means$emmean, alpha = 0.05, Letters = letters, adjust = "none", sort = TRUE, reverse = TRUE)
+```
+
+```{r}
+Waup_ERICA50_cld = as_tibble(Waup_ERICA50_cld) %>%
+  mutate(Trt = factor(Trt, levels= order),
+         SOA = fct_recode(Trt,
+                          "5" = "Tricor DF",
+                          "14" = "Valor SX",
+                         "2 + 14" = "Authority First",
+                          "14 + 15" = "Fierce",
+                          "14 + 15" = "Broadaxe XC",
+                          "2 + 14" = "Authority Assist",
+                          "14" = "Spartan",
+                          "15" = "Zidua",
+                          "15" = "Outlook",
+                          "15" = "Warrant",
+                          "15" = "Dual II Magnum",
+                          "2" = "Pursuit"))
+```
+
+```{r, fig.height= 8, fig.width= 12}
+Waup_ERICA50_cld %>%
+  ggplot(aes(Trt, response*100, colour = SOA)) +
+  geom_point(size = 6) +
+  geom_hline(yintercept = 90, color = "red", size = 1) +
+  geom_text(aes(label= .group), nudge_y = c(7,8,12,14,17,16,19,20,24,26,27,26), size = 7) + 
+  geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4), size= 1) +
+  geom_jitter(data= Waupaca50, mapping= aes(y=marestail), alpha=0.2, size= 4) +
+  scale_color_brewer(palette= "Dark2") +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,110)) +
+  coord_flip() +
+  labs(title = "Waupaca Marestail Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control") +
+theme(#legend.position = "none",
+        legend.text = element_text(size= 20),
+        legend.title = element_text(size= 25),
+        plot.title = element_text(size= 25),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25))
+```
+
+
+## Waupaca Lambsquarter 50 DAT
+```{r}
+Waup_CHEAL50 = glmmTMB(logit(lambsquarters) ~ Trt + (1|rep), family = "gaussian", data = Waupaca50)
+
+glmmTMB:::Anova.glmmTMB(Waup_CHEAL50)
+```
+
+```{r}
+Waup_CHEAL50_means = emmeans(Waup_CHEAL50, ~ Trt, contr = "pairwise", type = "response", adjust = "none", alpha = 0.05)
+
+Waup_CHEAL50_cld = cld(Waup_CHEAL50_means$emmean, alpha = 0.05, Letters = letters, adjust = "none", sort = TRUE, reverse = TRUE)
+```
+
+```{r}
+Waup_CHEAL50_cld = as_tibble(Waup_CHEAL50_cld) %>%
+  mutate(Trt = factor(Trt, levels= order),
+         SOA = fct_recode(Trt,
+                          "5" = "Tricor DF",
+                          "14" = "Valor SX",
+                         "2 + 14" = "Authority First",
+                          "14 + 15" = "Fierce",
+                          "14 + 15" = "Broadaxe XC",
+                          "2 + 14" = "Authority Assist",
+                          "14" = "Spartan",
+                          "15" = "Zidua",
+                          "15" = "Outlook",
+                          "15" = "Warrant",
+                          "15" = "Dual II Magnum",
+                          "2" = "Pursuit"))
+```
+
+```{r, fig.height= 8, fig.width= 12}
+Waup_CHEAL50_cld %>%
+  ggplot(aes(Trt, response*100, colour = SOA)) +
+  geom_point(size = 6) +
+  geom_hline(yintercept = 90, color = "red", size = 1) +
+  geom_text(aes(label= .group), nudge_y = c(5,5,5,5,5,5,5,5,5,5,5,15), size = 7) + 
+  geom_errorbar(aes(ymin= lower.CL*100, ymax= upper.CL*100, width= 0.4), size= 1) +
+  geom_jitter(data= Waupaca50, mapping= aes(y=lambsquarters), alpha=0.2, size= 4) +
+  scale_color_brewer(palette= "Dark2") +
+  scale_y_continuous("% Control", breaks= c(0,20,40,60,80,100), limits= c(0,110)) +
+  coord_flip() +
+  labs(title = "Waupaca Lambsquarter Efficacy - 50 DAT", x = "PRE Herbicide", y =  "% Control") +
+theme(#legend.position = "none",
+        legend.text = element_text(size= 20),
+        legend.title = element_text(size= 25),
+        plot.title = element_text(size= 25),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25))
+```
+
+# Weed Biomass
+```{r}
+library(rstatix)
+library(ggpubr)
+library(lme4)
+library(lmerTest)
+```
+
+```{r}
+Chippewa_bio = data2 %>%
+  filter(Location == "Chippewa") %>%
+  mutate(bio_square = sqrt(Waterhemp.Biomass),
+         bio_log = log(Waterhemp.Biomass+1))
+
+Waupaca_bio = data2 %>%
+  filter(Location == "Waupaca") %>%
+  mutate(bio_square = sqrt(Waterhemp.Biomass),
+         bio_log = log(Waterhemp.Biomass+1))
+```
+
+### Chippewa
+```{r}
+ggqqplot(Chippewa_bio, "Waterhemp.Biomass")
+ggqqplot(Chippewa_bio, "bio_square") #better?
+ggqqplot(Chippewa_bio, "bio_log")
+
+
+```
+
+```{r}
+Chip_bio = lmer(Waterhemp.Biomass ~ Trt + (1|rep),  data = Chippewa_bio)
+Chip_bio.1 = lmer(bio_square ~ Trt + (1|rep),  data = Chippewa_bio)
+Chip_bio.2 = lmer(bio_log ~ Trt + (1|rep),  data = Chippewa_bio)
+
+plot(Chip_bio)
+plot(Chip_bio.1) #better?
+plot(Chip_bio.2)
+
+#I'm going ot proceed with untransformed.
+#The potentially minor improvements weren't great
+```
+
+```{r}
+anova(Chip_bio) #significant
+```
+
+```{r}
+Chip_bio_means = emmeans(Chip_bio, ~ Trt, contr = "pairwise", adjust = "none")
+
+Chip_bio_CLD = cld(Chip_bio_means$emmeans,alpha=0.05, Letters=letters, sort=FALSE, reverse=FALSE)
+
+Chip_bio_CLD = as_tibble(Chip_bio_CLD) %>%
+  rename(Waterhemp.Biomass = emmean) %>%
+  mutate(Location = "Chippewa",
+         Waterhem.Biomass = round(Waterhemp.Biomass,0))
+```
+
+### Waupaca
+```{r}
+ggqqplot(Waupaca_bio, "Waterhemp.Biomass")
+ggqqplot(Waupaca_bio, "bio_square")
+ggqqplot(Waupaca_bio, "bio_log")
+
+#untransformed was best
+```
+
+```{r}
+Waup_bio = lmer(Waterhemp.Biomass ~ Trt + (1|rep),  data = Waupaca_bio)
+Waup_bio.1 = lmer(bio_square ~ Trt + (1|rep),  data = Waupaca_bio)
+Waup_bio.2 = lmer(bio_log ~ Trt + (1|rep),  data = Waupaca_bio)
+
+plot(Waup_bio)
+plot(Waup_bio.1)
+plot(Waup_bio.2)
+
+#I'm going to proceed with untransformed.
+#The potentially minor improvements weren't great
+```
+
+```{r}
+anova(Waup_bio) #significant
+```
+
+```{r}
+Waup_bio_means = emmeans(Waup_bio, ~ Trt, contr = "pairwise", adjust = "none")
+
+Waup_bio_CLD = cld(Waup_bio_means$emmeans,alpha=0.05, Letters=letters, sort=FALSE, reverse=FALSE)
+
+Waup_bio_CLD = as_tibble(Waup_bio_CLD) %>%
+  rename(Waterhemp.Biomass = emmean) %>%
+  mutate(Location = "Waupaca",
+         Waterhem.Biomass = round(Waterhemp.Biomass,0))
+```
+
+### Plotting Biomass
+```{r}
+AMATU_Bio = rbind(Chip_bio_CLD, Waup_bio_CLD)
+```
+
+```{r}
+Biomass = AMATU_Bio %>%
+  ggplot(aes(x = Trt, y = Waterhemp.Biomass)) +
+  geom_point(aes(), size = 5)
+```
+

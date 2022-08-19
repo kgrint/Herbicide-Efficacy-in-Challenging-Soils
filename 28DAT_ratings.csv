@@ -1,0 +1,159 @@
+Location,Time,Trt,ai,SOA,rep,EU,Overall,Grass,Waterhemp
+Chippewa,50 DAT,Check,Check,Check,1,101,1,1,1
+Chippewa,50 DAT,Tricor DF,metribuzin,5,1,102,99,99,99
+Chippewa,50 DAT,Pursuit,imazethapyr,2,1,103,50,50,50
+Chippewa,50 DAT,Spartan,sulfentrazone,14,1,104,60,40,99
+Chippewa,50 DAT,Valor SX,flumioxazin,14,1,105,99,99,99
+Chippewa,50 DAT,Warrant,acetochlor,15,1,106,35,40,30
+Chippewa,50 DAT,Dual II Magnum,S-metolachlor,15,1,107,30,70,20
+Chippewa,50 DAT,Outlook,dimethenamid-P,15,1,108,90,85,90
+Chippewa,50 DAT,Zidua,pyroxasulfone,15,1,109,65,60,70
+Chippewa,50 DAT,Authority Assist,imazethapyr + sulfentrazone,2 + 14,1,110,88,85,99
+Chippewa,50 DAT,Broadaxe XC,sulfentrazone + S-metolachlor,14 + 15,1,111,95,95,99
+Chippewa,50 DAT,Fierce,flumioxazin + pyroxasulfone,14 + 15,1,112,98,98,99
+Chippewa,50 DAT,Authority First,cloransulam-methyl + sulfentrazone,2 + 14,1,113,60,20,99
+Chippewa,50 DAT,Dual II Magnum,S-metolachlor,15,2,201,99,99,30
+Chippewa,50 DAT,Valor SX,flumioxazin,14,2,202,97,94,99
+Chippewa,50 DAT,Authority First,cloransulam-methyl + sulfentrazone,2 + 14,2,203,90,82,99
+Chippewa,50 DAT,Zidua,pyroxasulfone,15,2,204,97,94,99
+Chippewa,50 DAT,Warrant,acetochlor,15,2,205,82,95,80
+Chippewa,50 DAT,Outlook,dimethenamid-P,15,2,206,78,98,70
+Chippewa,50 DAT,Spartan,sulfentrazone,14,2,207,87,78,99
+Chippewa,50 DAT,Pursuit,imazethapyr,2,2,208,84,80,90
+Chippewa,50 DAT,Authority Assist,imazethapyr + sulfentrazone,2 + 14,2,209,98,98,99
+Chippewa,50 DAT,Broadaxe XC,sulfentrazone + S-metolachlor,14 + 15,2,210,99,99,99
+Chippewa,50 DAT,Check,Check,Check,2,211,1,1,1
+Chippewa,50 DAT,Tricor DF,metribuzin,5,2,212,97,96,99
+Chippewa,50 DAT,Fierce,flumioxazin + pyroxasulfone,14 + 15,2,213,98,99,99
+Chippewa,50 DAT,Warrant,acetochlor,15,3,301,45,90,30
+Chippewa,50 DAT,Outlook,dimethenamid-P,15,3,302,58,98,45
+Chippewa,50 DAT,Spartan,sulfentrazone,14,3,303,80,60,99
+Chippewa,50 DAT,Fierce,flumioxazin + pyroxasulfone,14 + 15,3,304,98,98,99
+Chippewa,50 DAT,Authority Assist,imazethapyr + sulfentrazone,2 + 14,3,305,82,65,99
+Chippewa,50 DAT,Dual II Magnum,S-metolachlor,15,3,306,89,97,80
+Chippewa,50 DAT,Check,Check,Check,3,307,1,1,1
+Chippewa,50 DAT,Broadaxe XC,sulfentrazone + S-metolachlor,14 + 15,3,308,96,95,99
+Chippewa,50 DAT,Valor SX,flumioxazin,14,3,309,97,97,99
+Chippewa,50 DAT,Tricor DF,metribuzin,5,3,310,80,62,99
+Chippewa,50 DAT,Zidua,pyroxasulfone,15,3,311,86,75,98
+Chippewa,50 DAT,Pursuit,imazethapyr,2,3,312,40,95,20
+Chippewa,50 DAT,Authority First,cloransulam-methyl + sulfentrazone,2 + 14,3,313,92,85,99
+Chippewa,50 DAT,Authority Assist,imazethapyr + sulfentrazone,2 + 14,4,401,96,95,99
+Chippewa,50 DAT,Broadaxe XC,sulfentrazone + S-metolachlor,14 + 15,4,402,99,99,99
+Chippewa,50 DAT,Warrant,acetochlor,15,4,403,75,60,93
+Chippewa,50 DAT,Valor SX,flumioxazin,14,4,404,97,94,99
+Chippewa,50 DAT,Check,Check,Check,4,405,1,1,1
+Chippewa,50 DAT,Fierce,flumioxazin + pyroxasulfone,14 + 15,4,406,99,99,99
+Chippewa,50 DAT,Tricor DF,metribuzin,5,4,407,95,89,99
+Chippewa,50 DAT,Authority First,cloransulam-methyl + sulfentrazone,2 + 14,4,408,50,30,99
+Chippewa,50 DAT,Dual II Magnum,S-metolachlor,15,4,409,89,90,88
+Chippewa,50 DAT,Spartan,sulfentrazone,14,4,410,40,45,40
+Chippewa,50 DAT,Pursuit,imazethapyr,2,4,411,44,90,35
+Chippewa,50 DAT,Zidua,pyroxasulfone,15,4,412,93,70,90
+Chippewa,50 DAT,Outlook,dimethenamid-P,15,4,413,91,90,92
+Waupaca,28 DAT,Check,Check,Check,1,101,1,1,1
+Waupaca,28 DAT,Tricor DF,metribuzin,5,1,102,100,100,100
+Waupaca,28 DAT,Pursuit,imazethapyr,2,1,103,95,100,100
+Waupaca,28 DAT,Spartan,sulfentrazone,14,1,104,95,100,100
+Waupaca,28 DAT,Valor SX,flumioxazin,14,1,105,95,100,100
+Waupaca,28 DAT,Warrant,acetochlor,15,1,106,95,100,100
+Waupaca,28 DAT,Dual II Magnum,S-metolachlor,15,1,107,95,100,100
+Waupaca,28 DAT,Outlook,dimethenamid-P,15,1,108,95,100,100
+Waupaca,28 DAT,Zidua,pyroxasulfone,15,1,109,95,100,100
+Waupaca,28 DAT,Authority Assist,imazethapyr + sulfentrazone,2 + 14,1,110,95,100,100
+Waupaca,28 DAT,Broadaxe XC,sulfentrazone + S-metolachlor,14 + 15,1,111,95,100,100
+Waupaca,28 DAT,Fierce,flumioxazin + pyroxasulfone,14 + 15,1,112,100,100,100
+Waupaca,28 DAT,Authority First,cloransulam-methyl + sulfentrazone,2 + 14,1,113,100,100,100
+Waupaca,28 DAT,Dual II Magnum,S-metolachlor,15,2,201,95,100,100
+Waupaca,28 DAT,Valor SX,flumioxazin,14,2,202,95,100,100
+Waupaca,28 DAT,Authority First,cloransulam-methyl + sulfentrazone,2 + 14,2,203,95,100,100
+Waupaca,28 DAT,Zidua,pyroxasulfone,15,2,204,95,100,100
+Waupaca,28 DAT,Warrant,acetochlor,15,2,205,100,100,100
+Waupaca,28 DAT,Outlook,dimethenamid-P,15,2,206,100,100,100
+Waupaca,28 DAT,Spartan,sulfentrazone,14,2,207,100,100,100
+Waupaca,28 DAT,Pursuit,imazethapyr,2,2,208,100,100,100
+Waupaca,28 DAT,Authority Assist,imazethapyr + sulfentrazone,2 + 14,2,209,95,100,100
+Waupaca,28 DAT,Broadaxe XC,sulfentrazone + S-metolachlor,14 + 15,2,210,95,100,100
+Waupaca,28 DAT,Check,Check,Check,2,211,1,1,1
+Waupaca,28 DAT,Tricor DF,metribuzin,5,2,212,100,100,100
+Waupaca,28 DAT,Fierce,flumioxazin + pyroxasulfone,14 + 15,2,213,95,100,100
+Waupaca,28 DAT,Warrant,acetochlor,15,3,301,95,100,100
+Waupaca,28 DAT,Outlook,dimethenamid-P,15,3,302,95,100,100
+Waupaca,28 DAT,Spartan,sulfentrazone,14,3,303,95,100,100
+Waupaca,28 DAT,Fierce,flumioxazin + pyroxasulfone,14 + 15,3,304,95,100,100
+Waupaca,28 DAT,Authority Assist,imazethapyr + sulfentrazone,2 + 14,3,305,95,100,100
+Waupaca,28 DAT,Dual II Magnum,S-metolachlor,15,3,306,95,100,100
+Waupaca,28 DAT,Check,Check,Check,3,307,1,1,1
+Waupaca,28 DAT,Broadaxe XC,sulfentrazone + S-metolachlor,14 + 15,3,308,95,100,100
+Waupaca,28 DAT,Valor SX,flumioxazin,14,3,309,95,100,100
+Waupaca,28 DAT,Tricor DF,metribuzin,5,3,310,100,100,100
+Waupaca,28 DAT,Zidua,pyroxasulfone,15,3,311,95,100,100
+Waupaca,28 DAT,Pursuit,imazethapyr,2,3,312,95,100,100
+Waupaca,28 DAT,Authority First,cloransulam-methyl + sulfentrazone,2 + 14,3,313,100,100,100
+Waupaca,28 DAT,Authority Assist,imazethapyr + sulfentrazone,2 + 14,4,401,95,100,100
+Waupaca,28 DAT,Broadaxe XC,sulfentrazone + S-metolachlor,14 + 15,4,402,95,100,100
+Waupaca,28 DAT,Warrant,acetochlor,15,4,403,95,100,100
+Waupaca,28 DAT,Valor SX,flumioxazin,14,4,404,95,100,100
+Waupaca,28 DAT,Check,Check,Check,4,405,1,1,1
+Waupaca,28 DAT,Fierce,flumioxazin + pyroxasulfone,14 + 15,4,406,95,100,100
+Waupaca,28 DAT,Tricor DF,metribuzin,5,4,407,99,100,100
+Waupaca,28 DAT,Authority First,cloransulam-methyl + sulfentrazone,2 + 14,4,408,99,100,100
+Waupaca,28 DAT,Dual II Magnum,S-metolachlor,15,4,409,95,100,100
+Waupaca,28 DAT,Spartan,sulfentrazone,14,4,410,95,100,100
+Waupaca,28 DAT,Pursuit,imazethapyr,2,4,411,95,100,100
+Waupaca,28 DAT,Zidua,pyroxasulfone,15,4,412,95,100,100
+Waupaca,28 DAT,Outlook,dimethenamid-P,15,4,413,95,100,100
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
