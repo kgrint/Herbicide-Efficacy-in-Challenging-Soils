@@ -86,7 +86,6 @@ data2= data1 %>%
 ```
 
 # Waterhemp Efficacy 
-
 ```{r}
 # trying to figure out if I need to change analysis for the distribution
 #ggplot(data2, aes(x= AMATU_EFF))+
